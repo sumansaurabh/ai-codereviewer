@@ -154,16 +154,24 @@ function createComment(
     reviewComment: string;
   }>
 ): Array<{ body: string; path: string; line: number }> {
-  return aiResponses.flatMap((aiResponse) => {
-    if (!file.to) {
-      return [];
+  // Collect all line numbers from the chunk's changes
+  const validLines = new Set<number>();
+  for (const change of chunk.changes) {
+    if (change.ln !== undefined) {
+      validLines.add(change.ln);
     }
-    return {
+    if (change.ln2 !== undefined) {
+      validLines.add(change.ln2);
+    }
+  }
+
+  return aiResponses
+    .filter((aiResponse) => validLines.has(Number(aiResponse.lineNumber)))
+    .map((aiResponse) => ({
       body: aiResponse.reviewComment,
-      path: file.to,
+      path: file.to!,
       line: Number(aiResponse.lineNumber),
-    };
-  });
+    }));
 }
 
 async function createReviewComment(
