@@ -168,12 +168,29 @@ function createComment(file, chunk, aiResponses) {
         if (!file.to) {
             return [];
         }
+        const lineNumber = Number(aiResponse.lineNumber);
+        const position = getPositionInDiff(chunk, lineNumber);
+        if (position === -1) {
+            return [];
+        }
         return {
             body: aiResponse.reviewComment,
             path: file.to,
-            line: Number(aiResponse.lineNumber),
+            position: position,
         };
     });
+}
+function getPositionInDiff(chunk, lineNumber) {
+    let position = 0;
+    for (const change of chunk.changes) {
+        position++;
+        // @ts-expect-error - ln and ln2 exists where needed
+        const changeLineNumber = change.ln || change.ln2;
+        if (changeLineNumber === lineNumber) {
+            return position;
+        }
+    }
+    return -1;
 }
 function createReviewComment(owner, repo, pull_number, comments) {
     return __awaiter(this, void 0, void 0, function* () {

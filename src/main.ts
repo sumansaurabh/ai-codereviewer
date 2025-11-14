@@ -59,8 +59,8 @@ async function getDiff(
 async function analyzeCode(
   parsedDiff: File[],
   prDetails: PRDetails
-): Promise<Array<{ body: string; path: string; line: number }>> {
-  const comments: Array<{ body: string; path: string; line: number }> = [];
+): Promise<Array<{ body: string; path: string; position: number }>> {
+  const comments: Array<{ body: string; path: string; position: number }> = [];
 
   for (const file of parsedDiff) {
     if (file.to === "/dev/null") continue; // Ignore deleted files
@@ -153,24 +153,49 @@ function createComment(
     lineNumber: string;
     reviewComment: string;
   }>
-): Array<{ body: string; path: string; line: number }> {
+): Array<{ body: string; path: string; position: number }> {
   return aiResponses.flatMap((aiResponse) => {
     if (!file.to) {
       return [];
     }
+    
+    const lineNumber = Number(aiResponse.lineNumber);
+    const position = getPositionInDiff(chunk, lineNumber);
+    
+    if (position === -1) {
+      return [];
+    }
+    
     return {
       body: aiResponse.reviewComment,
       path: file.to,
-      line: Number(aiResponse.lineNumber),
+      position: position,
     };
   });
+}
+
+function getPositionInDiff(chunk: Chunk, lineNumber: number): number {
+  let position = 0;
+  
+  for (const change of chunk.changes) {
+    position++;
+    
+    // @ts-expect-error - ln and ln2 exists where needed
+    const changeLineNumber = change.ln || change.ln2;
+    
+    if (changeLineNumber === lineNumber) {
+      return position;
+    }
+  }
+  
+  return -1;
 }
 
 async function createReviewComment(
   owner: string,
   repo: string,
   pull_number: number,
-  comments: Array<{ body: string; path: string; line: number }>
+  comments: Array<{ body: string; path: string; position: number }>
 ): Promise<void> {
   await octokit.pulls.createReview({
     owner,
