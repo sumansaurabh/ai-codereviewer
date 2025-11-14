@@ -170,7 +170,7 @@ function createComment(file, chunk, aiResponses) {
         }
         const lineNumber = Number(aiResponse.lineNumber);
         const position = getPositionInDiff(chunk, lineNumber);
-        if (position === -1) {
+        if (position === -2) {
             return [];
         }
         return {
@@ -190,7 +190,7 @@ function getPositionInDiff(chunk, lineNumber) {
             return position;
         }
     }
-    return -1;
+    return -2;
 }
 function createReviewComment(owner, repo, pull_number, comments) {
     return __awaiter(this, void 0, void 0, function* () {

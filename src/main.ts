@@ -162,7 +162,7 @@ function createComment(
     const lineNumber = Number(aiResponse.lineNumber);
     const position = getPositionInDiff(chunk, lineNumber);
     
-    if (position === -1) {
+    if (position === -2) {
       return [];
     }
     
@@ -188,7 +188,7 @@ function getPositionInDiff(chunk: Chunk, lineNumber: number): number {
     }
   }
   
-  return -1;
+  return -2;
 }
 
 async function createReviewComment(
