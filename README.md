@@ -1,25 +1,24 @@
-# AI Code Reviewer
+# Réviseur de Code IA
 
-AI Code Reviewer is a GitHub Action that leverages OpenAI's GPT-4 API to provide intelligent feedback and suggestions on
-your pull requests. This powerful tool helps improve code quality and saves developers time by automating the code
-review process.
+Le Réviseur de Code IA est une Action GitHub qui utilise l'API GPT-4 d'OpenAI pour fournir des retours intelligents et des suggestions sur
+vos pull requests. Cet outil puissant aide à améliorer la qualité du code et économise du temps aux développeurs en automatisant le processus de révision de code.
 
-## Features
+## Fonctionnalités
 
-- Reviews pull requests using OpenAI's GPT-4 API.
-- Provides intelligent comments and suggestions for improving your code.
-- Filters out files that match specified exclude patterns.
-- Easy to set up and integrate into your GitHub workflow.
+- Révise les pull requests en utilisant l'API GPT-4 d'OpenAI.
+- Fournit des commentaires intelligents et des suggestions pour améliorer votre code.
+- Filtre les fichiers qui correspondent aux motifs d'exclusion spécifiés.
+- Facile à configurer et intégrer dans votre workflow GitHub.
 
-## Setup
+## Configuration
 
-1. To use this GitHub Action, you need an OpenAI API key. If you don't have one, sign up for an API key
-   at [OpenAI](https://beta.openai.com/signup).
+1. Pour utiliser cette Action GitHub, vous avez besoin d'une clé API OpenAI. Si vous n'en avez pas, inscrivez-vous pour obtenir une clé API
+   sur [OpenAI](https://beta.openai.com/signup).
 
-2. Add the OpenAI API key as a GitHub Secret in your repository with the name `OPENAI_API_KEY`. You can find more
-   information about GitHub Secrets [here](https://docs.github.com/en/actions/reference/encrypted-secrets).
+2. Ajoutez la clé API OpenAI en tant que Secret GitHub dans votre dépôt avec le nom `OPENAI_API_KEY`. Vous pouvez trouver plus
+   d'informations sur les Secrets GitHub [ici](https://docs.github.com/en/actions/reference/encrypted-secrets).
 
-3. Create a `.github/workflows/main.yml` file in your repository and add the following content:
+3. Créez un fichier `.github/workflows/main.yml` dans votre dépôt et ajoutez le contenu suivant :
 
 ```yaml
 name: AI Code Reviewer
@@ -40,31 +39,29 @@ jobs:
       - name: AI Code Reviewer
         uses: your-username/ai-code-reviewer@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # The GITHUB_TOKEN is there by default so you just need to keep it like it is and not necessarily need to add it as secret as it will throw an error. [More Details](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Le GITHUB_TOKEN est là par défaut, vous n'avez donc qu'à le garder tel quel et pas nécessairement à l'ajouter en tant que secret car cela générera une erreur. [Plus de détails](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_API_MODEL: "gpt-4" # Optional: defaults to "gpt-4"
-          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
+          OPENAI_API_MODEL: "gpt-4" # Optionnel : par défaut "gpt-4"
+          exclude: "**/*.json, **/*.md" # Optionnel : motifs d'exclusion séparés par des virgules
 ```
 
-4. Replace `your-username` with your GitHub username or organization name where the AI Code Reviewer repository is
-   located.
+4. Remplacez `your-username` par votre nom d'utilisateur GitHub ou le nom de l'organisation où se trouve le dépôt du Réviseur de Code IA.
 
-5. Customize the `exclude` input if you want to ignore certain file patterns from being reviewed.
+5. Personnalisez l'entrée `exclude` si vous souhaitez ignorer certains motifs de fichiers lors de la révision.
 
-6. Commit the changes to your repository, and AI Code Reviewer will start working on your future pull requests.
+6. Commitez les changements dans votre dépôt, et le Réviseur de Code IA commencera à travailler sur vos futures pull requests.
 
-## How It Works
+## Comment Ça Marche
 
-The AI Code Reviewer GitHub Action retrieves the pull request diff, filters out excluded files, and sends code chunks to
-the OpenAI API. It then generates review comments based on the AI's response and adds them to the pull request.
+L'Action GitHub Réviseur de Code IA récupère le diff de la pull request, filtre les fichiers exclus, et envoie des morceaux de code à
+l'API OpenAI. Elle génère ensuite des commentaires de révision basés sur la réponse de l'IA et les ajoute à la pull request.
 
-## Contributing
+## Contribution
 
-Contributions are welcome! Please feel free to submit issues or pull requests to improve the AI Code Reviewer GitHub
-Action.
+Les contributions sont les bienvenues ! N'hésitez pas à soumettre des issues ou des pull requests pour améliorer l'Action GitHub Réviseur de Code IA.
 
-Let the maintainer generate the final package (`yarn build` & `yarn package`).
+Laissez le mainteneur générer le package final (`yarn build` & `yarn package`).
 
-## License
+## Licence
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus d'informations.
